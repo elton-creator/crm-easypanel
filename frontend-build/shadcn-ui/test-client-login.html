@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Client Login</title>
+</head>
+<body>
+    <h1>Testing Client Login Logic</h1>
+    <div id="output"></div>
+    <script>
+        const mockUsers = [
+            {
+                id: '1',
+                name: 'Admin',
+                email: 'admin@crm.com',
+                role: 'admin',
+                status: 'active'
+            },
+            {
+                id: '2',
+                name: 'João Silva',
+                email: 'joao@empresa.com',
+                role: 'client',
+                status: 'active'
+            },
+            {
+                id: '3',
+                name: 'Maria Santos',
+                email: 'maria@loja.com',
+                role: 'client',
+                status: 'active'
+            }
+        ];
+
+        function testLogin(email, password) {
+            const foundUser = mockUsers.find(u => u.email === email);
+            console.log('Testing:', email);
+            console.log('Found user:', foundUser);
+            
+            if (!foundUser || (password !== 'admin123' && password !== 'client123')) {
+                console.log('❌ Failed: user not found or wrong password');
+                return false;
+            }
+            
+            if (foundUser.role === 'admin') {
+                console.log('✅ Admin login successful');
+                return true;
+            }
+            
+            if (foundUser.status !== 'active') {
+                console.log('❌ Failed: client is not active');
+                return false;
+            }
+            
+            console.log('✅ Client login successful');
+            return true;
+        }
+
+        const output = document.getElementById('output');
+        output.innerHTML = '<pre>' + 
+            'Admin Login: ' + testLogin('admin@crm.com', 'admin123') + '\n' +
+            'Client 1 Login: ' + testLogin('joao@empresa.com', 'client123') + '\n' +
+            'Client 2 Login: ' + testLogin('maria@loja.com', 'client123') + '\n' +
+            '</pre>';
+    </script>
+</body>
+</html>

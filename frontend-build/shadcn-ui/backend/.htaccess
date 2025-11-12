@@ -1,0 +1,51 @@
+RewriteEngine On
+
+# CORS Headers
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+# Handle preflight OPTIONS requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# API Routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Auth routes
+RewriteRule ^api/auth/?$ api/auth.php [L,QSA]
+RewriteRule ^api/login/?$ api/auth.php [L,QSA]
+
+# Clients routes
+RewriteRule ^api/clients/?$ api/clients.php [L,QSA]
+
+# Funnels routes
+RewriteRule ^api/funnels/?$ api/funnels.php [L,QSA]
+
+# Leads routes
+RewriteRule ^api/leads/?$ api/leads.php [L,QSA]
+RewriteRule ^api/leads/([0-9]+)/?$ api/leads.php [L,QSA]
+RewriteRule ^api/leads/([0-9]+)/stage/?$ api/leads.php [L,QSA]
+
+# Webhooks routes
+RewriteRule ^api/webhooks/?$ api/webhooks.php [L,QSA]
+RewriteRule ^api/webhooks/([0-9]+)/?$ api/webhooks.php [L,QSA]
+RewriteRule ^api/webhooks/([0-9]+)/test/?$ api/webhooks.php [L,QSA]
+
+# Security
+<Files "*.sql">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.log">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# PHP Settings
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_execution_time 300
+php_value memory_limit 256M
